@@ -9,6 +9,21 @@ import rotten_tomatoes from "@/public/assets/rotten_tomatoes.svg";
 import { useRouter } from "next/navigation";
 
 
+async function getTopRatedMovies() {
+    const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${process.env.NEXT_ACCESS_TOKEN}`
+        }
+      };
+    const api = `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.NEXT_API_KEY}&language=en-US&page=1`;
+    const res = await fetch(api, options);
+    const data= await res.json();
+    return data?.results?.slice(0, 10);
+}
+
+
 const MovieItem = ({ data }) => {
     const router = useRouter();
     const [like, setLike] = useState(false);
